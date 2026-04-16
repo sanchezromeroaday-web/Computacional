@@ -32,7 +32,7 @@ trail_width = 1.5
 planet_colors = ['#FFD700', 'gray', 'orange', 'deepskyblue', 'tomato', 'sandybrown', 'khaki', 'paleturquoise'] 
 
 # Tamaños: [Sol, Mercurio, Venus, Tierra, Marte, Júpiter, Saturno, Urano]
-planet_radius = [0.75, 0.15, 0.3, 0.35, 0.2, 0.5, 0.5, 0.4]
+planet_radius = [0.75, 0.30, 0.45, 0.50, 0.35, 0.65, 0.65, 0.55]
 
 
 # ========================================

@@ -13,7 +13,7 @@ using namespace std;
 #define ARCHIVO_ENERGIA "energia_momento.txt" 
 
 #define MAX_CUERPOS 100
-#define ITERACIONES 1000000
+#define ITERACIONES 100000
 #define PASO_TIEMPO 0.001
 
 #define MASA_SOLAR 1.989e30
