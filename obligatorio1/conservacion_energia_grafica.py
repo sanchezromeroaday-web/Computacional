@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 
 print("Leyendo datos de energia_momento.txt...")
 
-# 1. Leer los datos generados por C++
-# El separador es el tabulador ("\t") tal como lo programaste en C++
+# 1. Leer los datos generados 
 energia = pd.read_csv("energia_momento.txt", sep="\t", names=["t", "E", "L"])
 
 # 2. Crear la figura con dos subgráficas (una encima de la otra)
@@ -28,7 +27,7 @@ ax2.set_ylabel("Energía Total")
 ax2.grid(True, linestyle='--', alpha=0.7)
 
 # 3. Ajustar espacios, guardar y mostrar
-plt.tight_layout() # Ajusta automáticamente los márgenes para que no se pisen los textos
+plt.tight_layout() 
 
 print("Guardando imágenes...")
 plt.savefig("conservacion_E_L.png", dpi=300) # Imagen ideal para presentaciones
