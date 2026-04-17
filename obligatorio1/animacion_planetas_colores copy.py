@@ -14,10 +14,10 @@ file_in = "planets_data.dat"
 file_out = "planetas_colores" 
 
 # Límites de los ejes X e Y (Ajusta si los planetas se salen de la pantalla)
-x_min = -10
-x_max = 10
-y_min = -10 
-y_max = 10
+x_min = -20
+x_max = 20
+y_min = -20 
+y_max = 20
 
 # Configuración de Animación
 interval = 20        # Tiempo entre fotogramas en milisegundos

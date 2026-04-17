@@ -8,7 +8,7 @@ using namespace std;
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // DEFINICIÓN DE CONSTANTES (PARÁMETROS)
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#define ARCHIVO_ENTRADA "condiciones_i.txt" 
+#define ARCHIVO_ENTRADA "condiciones_i_b.txt" 
 #define ARCHIVO_SALIDA "planets_data.dat" 
 #define ARCHIVO_ENERGIA "energia_momento.txt" 
 
@@ -96,13 +96,13 @@ int main() {
             pos_y[i] += PASO_TIEMPO * vel_y[i] + (pow(PASO_TIEMPO, 2) / 2.0) * acel_y[i];
 
             // NUEVO: ¡Solo guardamos 1 de cada 100 pasos!
-            if (k % 100 == 0) {
+            if (k % 10 == 0) {
                 f_salida << pos_x[i] << "," << pos_y[i] << "\n";
             }
         }
         
         // NUEVO: El salto de línea también lo hacemos solo 1 de cada 100 veces
-        if (k % 100 == 0) {
+        if (k % 10 == 0) {
             f_salida << "\n";
         }
 
