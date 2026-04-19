@@ -1,4 +1,5 @@
-+En esta carpeta (obligatorio1) se encuentra todo el contenido relacionado con la resolución del ejercicio Obligatorio 1, correspondiente a la simulación del Sistema Solar a partir del algoritmo de Verlet.
+
+En esta carpeta (obligatorio1) se encuentra todo el contenido relacionado con la resolución del ejercicio Obligatorio 1, correspondiente a la simulación del Sistema Solar a partir del algoritmo de Verlet.
 
 Cálculo de datos:
 
