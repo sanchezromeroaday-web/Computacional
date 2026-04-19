@@ -8,7 +8,7 @@ using namespace std;
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 // DEFINICIÓN DE CONSTANTES (PARÁMETROS)
 // $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-#define ARCHIVO_ENTRADA "condiciones_i_b.txt" 
+#define ARCHIVO_ENTRADA "condiciones_i.txt" 
 #define ARCHIVO_SALIDA "planets_data.dat" 
 #define ARCHIVO_ENERGIA "energia_momento.txt" 
 

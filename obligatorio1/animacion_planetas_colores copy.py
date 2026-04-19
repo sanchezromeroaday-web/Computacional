@@ -128,8 +128,7 @@ if nframes > 1:
             frames=len(frames_data), blit=True, interval=interval)
 
     if save_to_file:
-        # Si te sigue dando problemas el mp4, cambia la línea de abajo por:
-        # animation.save(f"{file_out}.gif", dpi=dpi, writer='pillow')
+        
         animation.save(f"{file_out}.mp4", dpi=dpi, writer='ffmpeg')
     else:
         plt.show()

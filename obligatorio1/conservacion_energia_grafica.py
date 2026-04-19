@@ -30,8 +30,8 @@ ax2.grid(True, linestyle='--', alpha=0.7)
 plt.tight_layout() 
 
 print("Guardando imágenes...")
-plt.savefig("conservacion_E_L.png", dpi=300) # Imagen ideal para presentaciones
-plt.savefig("conservacion_E_L.pdf")          # PDF ideal para el informe LaTeX
+plt.savefig("conservacion_E_L.png", dpi=300) 
+plt.savefig("conservacion_E_L.pdf")          
 
 print("Abriendo ventana de gráficas...")
 plt.show()
