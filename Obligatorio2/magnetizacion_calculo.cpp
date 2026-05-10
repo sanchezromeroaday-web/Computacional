@@ -1,3 +1,4 @@
+%%writefile ising_mag.cpp
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -8,18 +9,20 @@ using namespace std;
 
 int main() {
     int dim = 50;            
-    int iter = 1000;      
+    int iter = 1000000;     // CORREGIDO: 10^6 pasos Monte Carlo
     unsigned int seed = 12345;
     std::srand(seed);
 
-    // Solo creamos el archivo para la magnetización
-    ofstream data_mag("magnetizacion.txt");
+    ofstream data_mag("magnetizacion_data.dat"); // Ajustado al nombre del Markdown
     
     // Bucle de temperaturas (de 1.0 a 4.0)
     for (float T = 1.0; T <= 4.0; T += 0.1) {
         
         // * ESTADO INICIAL ORDENADO (+1) * //
         vector<vector<int>> s(dim, vector<int>(dim, 1));
+
+        float M_acumulado = 0; // Para promediar al final
+        int pasos_medicion = 0;
 
         // * EVOLUCIÓN: PASOS MONTE CARLO * //
         for (int k = 0; k < iter; k++) {
@@ -43,22 +46,28 @@ int main() {
                     s[i][j] *= -1;
                 }
             }
-        }
 
-        // * CALCULAR MAGNETIZACIÓN ESPERADA AL FINALIZAR * //
-        float M = 0;
-        for (int i = 0; i < dim; i++) {
-            for (int j = 0; j < dim; j++) {
-                M += s[i][j];
+            // MEJORA: Empezamos a medir M solo en el último 10% de los pasos (cuando ya termalizó)
+            if (k >= iter - 1000) {
+                float M_paso = 0;
+                for (int i = 0; i < dim; i++) {
+                    for (int j = 0; j < dim; j++) {
+                        M_paso += s[i][j];
+                    }
+                }
+                M_acumulado += std::abs(M_paso) / (dim * dim);
+                pasos_medicion++;
             }
         }
-        M = std::abs(M) / (dim * dim);
+
+        // Promedio final de la magnetización a esta temperatura T
+        float M_final = M_acumulado / pasos_medicion;
         
         // Guardar T y M en el archivo
-        data_mag << T << "\t" << M << endl;
+        data_mag << T << "\t" << M_final << endl;
+        cout << "Calculada T = " << T << " | M = " << M_final << endl; // Para ver el progreso
     }
 
     data_mag.close();
-   
     return 0;
 }
