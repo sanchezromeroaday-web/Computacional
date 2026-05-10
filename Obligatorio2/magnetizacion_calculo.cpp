@@ -8,12 +8,12 @@
 using namespace std;
 
 int main() {
-    int dim = 50;            
-    int iter = 1000000;     // CORREGIDO: 10^6 pasos Monte Carlo
+    int dim = 20;            
+    int iter = 1000000;     //  10^6 pasos Monte Carlo
     unsigned int seed = 12345;
     std::srand(seed);
 
-    ofstream data_mag("magnetizacion_data.dat"); // Ajustado al nombre del Markdown
+    ofstream data_mag("magnetizacion_data.dat"); //
     
     // Bucle de temperaturas (de 1.0 a 4.0)
     for (float T = 1.0; T <= 4.0; T += 0.1) {
@@ -47,7 +47,7 @@ int main() {
                 }
             }
 
-            // MEJORA: Empezamos a medir M solo en el último 10% de los pasos (cuando ya termalizó)
+            //  Empezamos a medir M solo en el último 10% de los pasos
             if (k >= iter - 1000) {
                 float M_paso = 0;
                 for (int i = 0; i < dim; i++) {

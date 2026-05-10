@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # 1. Leer los datos del archivo generado por C++
 # loadtxt automáticamente separa las columnas guiándose por los espacios/tabuladores
-datos = np.loadtxt("magnetizacion.txt")
+datos = np.loadtxt("magnetizacion_data.dat")
 
 temperaturas = datos[:, 0]     # La primera columna es la Temperatura
 magnetizaciones = datos[:, 1]  # La segunda columna es la Magnetización
