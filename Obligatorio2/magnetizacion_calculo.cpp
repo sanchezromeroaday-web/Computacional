@@ -1,4 +1,4 @@
-%%writefile ising_mag.cpp
+
 #include <iostream>
 #include <vector>
 #include <cmath>
