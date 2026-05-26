@@ -23,7 +23,7 @@ constexpr double DELTA = 7.01474e-12; // Parámetro Delta
 constexpr double MU = 0.0123025;      // Parámetro Mu
 
 //? PARÁMETROS DE LA SIMULACIÓN
-constexpr int ITER = 500000; // Iteraciones a realizar
+constexpr int ITER = 900000; // Iteraciones a realizar
 constexpr double H_STEP = 1.0; // Paso de integración h
 
 //? ECUACIONES DIFERENCIALES
@@ -62,8 +62,8 @@ double calcular_H_prima(const array<double, 4>& y, double t) {
 
 int main() {
     //? VALORES INICIALES
- double theta = PI / 3.4; 
-double v = 11000.0 / DTL;
+ double theta = PI / 2.2; 
+double v = 11080.0 / DTL;
     // Vector y(t) = {Radio(0), ángulo(1), momento radial(2), momento angular(3)}
     array<double, 4> y = {
         RT / DTL,

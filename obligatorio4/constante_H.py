@@ -12,7 +12,6 @@ H_prima = data[:, 5]
 # GRÁFICA: CONSERVACIÓN DE H'
 # ==========================================
 fig, ax = plt.subplots(figsize=(10, 4))
-
 ax.plot(t, H_prima, color='purple', linewidth=1.5, label=r"$H'$ (Integral de Jacobi)")
 
 ax.set_title("Evolución de la constante del movimiento $H'$", fontsize=14)

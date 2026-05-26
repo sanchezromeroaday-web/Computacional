@@ -51,7 +51,7 @@ def update(i):
     return luna, cohete, lcohete
 
 # Animamos tomando 1 frame cada 1000 iteraciones para no sobrecargar el GIF
-paso_frames = 1000
+paso_frames = 5000
 frames_totales = range(0, IT, paso_frames)
 
 anim = animation.FuncAnimation(fig, update, frames=frames_totales, 
