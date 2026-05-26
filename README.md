@@ -1,10 +1,10 @@
-# Física Computacional - UGR 🚀
+# Física Computacional - UGR 
 
 Repositorio de proyectos y simulaciones numéricas desarrollados para la asignatura de Física Computacional del Grado en Física de la Universidad de Granada (UGR). 
 
 Este repositorio se centra en la resolución de sistemas físicos complejos y el análisis de sus dinámicas mediante métodos numéricos, separando el motor de cálculo pesado de la visualización de datos.
 
-## 🛠️ Stack Tecnológico y Herramientas
+## Stack Tecnológico y Herramientas
 
 * **C++:** Motor principal de cálculo. Empleado para ejecutar las integraciones numéricas (como métodos de Runge-Kutta) y algoritmos de simulación para garantizar el máximo rendimiento y eficiencia computacional.
 * **Python:** Análisis de datos y visualización gráfica. Utilizado para procesar los *outputs* de C++, generar gráficas y crear animaciones de los sistemas físicos.
