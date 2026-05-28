@@ -4,7 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
-
+#include <chrono>
 // ==========================================
 // 1. CONSTANTES REESCALADAS Y PARAMETROS
 // ==========================================
@@ -12,11 +12,12 @@ const double G = 1.0;
 const double M_BH = 4100000.0;       // Masa del agujero negro central (Sagitario A*)
 const double M_SISTEMA = 1.0;        // Masa de cada sistema solar
 const double RADIO_BH = 50.0;        // Radio de absorción del agujero negro
+const double R_S = 15.0;             // Radio de Schwarzschild (Curvatura espacio-tiempo)
 const double RADIO_GALAXIA = 8000.0; // Radio máximo de la distribución inicial
-const double CUTOFF_GRAV = 200.0;    // Distancia máxima para calcular gravedad entre sistemas
-const double RADIO_COLISION = 2.0;   // Radio ficticio de interacción para choques elásticos
+const double CUTOFF_GRAV = 200.0;    // Distancia máxima para calcular gravedad
+const double RADIO_COLISION = 2.0;   // Radio de interacción para choques elásticos
 
-// Estructuras de datos
+// Estructuras de datos (se mantienen igual)
 struct Vector2D {
     double x, y;
 };
@@ -37,7 +38,7 @@ double numAleatorio(double min, double max) {
     return min + (max - min) * ((double)rand() / RAND_MAX);
 }
 
-// Inicializa un sistema solar en una órbita circular cerrada a una distancia r
+// Inicializa un sistema solar en una órbita a una distancia r
 void generarOrbitaCerrada(SistemaSolar& sis, double radio) {
     double theta = numAleatorio(0, 2 * M_PI);
     
@@ -45,8 +46,12 @@ void generarOrbitaCerrada(SistemaSolar& sis, double radio) {
     sis.pos.x = radio * std::cos(theta);
     sis.pos.y = radio * std::sin(theta);
     
-    // Velocidad: factor aleatorio para dar excentricidad y permitir flujo de masa
-    double v_mag = std::sqrt(G * M_BH / radio) * numAleatorio(0.2, 1.1);
+    // 1. Velocidad teórica para órbita circular (Potencial pseudo-newtoniano)
+    double v_teorica = std::sqrt(G * M_BH * radio) / (radio - R_S);
+    
+    // 2. CAOS SUAVIZADO: Perturbación térmica ligera [0.85, 1.05]
+    // Mantiene el momento angular estable pero permite elipses suaves.
+    double v_mag = v_teorica * numAleatorio(0.90, 1.10); 
     
     sis.vel.x = -v_mag * std::sin(theta);
     sis.vel.y = v_mag * std::cos(theta);
@@ -69,16 +74,19 @@ void calcularAceleraciones(std::vector<SistemaSolar>& galaxia) {
 
     for (int i = 0; i < N; i++) {
         if (!galaxia[i].activo) continue;
-
-        // A. Fuerza del Agujero Negro
+// A. Fuerza del Agujero Negro (Potencial pseudo-newtoniano de Paczyński-Wiita)
         double dx_bh = -galaxia[i].pos.x;
         double dy_bh = -galaxia[i].pos.y;
         double dist2_bh = dx_bh*dx_bh + dy_bh*dy_bh;
         double dist_bh = std::sqrt(dist2_bh);
         
-        double factor_bh = (G * M_BH) / (dist_bh * dist2_bh); 
-        galaxia[i].a.x += factor_bh * dx_bh;
-        galaxia[i].a.y += factor_bh * dy_bh;
+        // Evitamos dividir por cero si la partícula cruza el radio de Schwarzschild
+        if (dist_bh > R_S) {
+            // El factor incluye dist_bh extra dividiendo para normalizar el vector director (dx, dy)
+            double factor_bh = (G * M_BH) / ((dist_bh - R_S) * (dist_bh - R_S) * dist_bh); 
+            galaxia[i].a.x += factor_bh * dx_bh;
+            galaxia[i].a.y += factor_bh * dy_bh;
+        }
 
         // B. Fuerza del resto de Sistemas (Optimizada con CUTOFF)
         for (int j = i + 1; j < N; j++) {
@@ -170,7 +178,10 @@ void calcularObservables(const std::vector<SistemaSolar>& galaxia, double& K, do
         double v2 = sis.vel.x * sis.vel.x + sis.vel.y * sis.vel.y;
         
         K += 0.5 * M_SISTEMA * v2;
-        U -= (G * M_BH * M_SISTEMA) / r;
+        // Cambiamos el potencial clásico por el relativista
+        if (r > R_S) {
+            U -= (G * M_BH * M_SISTEMA) / (r - R_S);
+        }
         Lz += M_SISTEMA * (sis.pos.x * sis.vel.y - sis.pos.y * sis.vel.x);
     }
 
@@ -219,13 +230,14 @@ void guardarDatos(const std::vector<SistemaSolar>& galaxia, std::ofstream& archi
 // 5. BLOQUE PRINCIPAL
 // ==========================================
 
+
 int main() {
     std::srand(std::time(nullptr));
 
     // Parámetros de la simulación
     int num_sistemas = 1000;
     double h = 0.005; 
-    int num_pasos = 25000; 
+    int num_pasos = 60000; 
     int pasos_por_frame = 50; 
     int absorbidos_totales = 0;
 
@@ -235,6 +247,10 @@ int main() {
     std::ofstream archivo_salida("datos_galaxia.dat");
     std::ofstream archivo_energias("energias_galaxia.dat"); 
     std::ofstream archivo_flujo("flujo_masa.dat"); 
+    
+    // --- NUEVO: Archivo para los datos de rendimiento
+    std::ofstream archivo_rendimiento("rendimiento_cluster.csv");
+    archivo_rendimiento << "Paso,Tiempo_ms\n"; 
 
     std::cout << "Inicializando galaxia..." << std::endl;
     for (int i = 0; i < num_sistemas; i++) {
@@ -245,6 +261,10 @@ int main() {
     calcularAceleraciones(galaxia);
 
     std::cout << "Comenzando simulacion..." << std::endl;
+    
+    // --- NUEVO: Iniciamos el cronómetro justo antes de arrancar el bucle principal
+    auto inicio_simulacion = std::chrono::high_resolution_clock::now();
+
     for (int t = 0; t < num_pasos; t++) {
         
         pasoVerlet(galaxia, h);
@@ -261,17 +281,27 @@ int main() {
             double virial = 2.0 * K + U;
             archivo_energias << (t * h) << " " << K << " " << U << " " << E_total << " " << Lz << " " << virial << "\n";
             
-            // Flujo de masa (La línea que te faltaba antes)
+            // Flujo de masa
             archivo_flujo << (t * h) << " " << absorbidos_totales << "\n";
+
+            // --- NUEVO: Medimos el tiempo transcurrido en ms y lo guardamos
+            auto momento_actual = std::chrono::high_resolution_clock::now();
+            auto tiempo_transcurrido_ms = std::chrono::duration_cast<std::chrono::milliseconds>(momento_actual - inicio_simulacion).count();
+            archivo_rendimiento << t << "," << tiempo_transcurrido_ms << "\n";
 
             if (t % (num_pasos/10) == 0) std::cout << "Completado: " << (t*100)/num_pasos << "%" << std::endl;
         }
     }
 
+    // --- NUEVO: Detenemos el cronómetro al terminar el bucle
+    auto fin_simulacion = std::chrono::high_resolution_clock::now();
+    auto tiempo_total_ms = std::chrono::duration_cast<std::chrono::milliseconds>(fin_simulacion - inicio_simulacion).count();
+
     // Cierre de archivos en bucle
     archivo_salida.close();
     archivo_energias.close(); 
     archivo_flujo.close(); 
+    archivo_rendimiento.close(); // --- NUEVO: Cerramos el archivo de rendimiento
 
     double tiempo_total = num_pasos * h;
     double flujo_medio = absorbidos_totales / tiempo_total;
@@ -279,6 +309,7 @@ int main() {
     std::cout << "Simulacion terminada." << std::endl;
     std::cout << "Sistemas totales absorbidos: " << absorbidos_totales << std::endl;
     std::cout << "FLUJO MEDIO DE MASA ABSORBIDO: " << flujo_medio << " masas solares / unidad de tiempo" << std::endl;
+    std::cout << "TIEMPO REAL DE EJECUCIÓN: " << tiempo_total_ms << " ms" << std::endl; // --- NUEVO: Imprime el tiempo final en consola
 
     // ==========================================
     // EXTRA: FOTOS FINALES (ROTACIÓN Y MAPA)
@@ -303,3 +334,4 @@ int main() {
     
     return 0;
 }
+    

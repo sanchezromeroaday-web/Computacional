@@ -38,14 +38,7 @@ axs[1].set_ylabel('$L_z$')
 axs[1].legend(loc='upper right')
 axs[1].grid(True, linestyle='--', alpha=0.6)
 
-# 3. Gráfica del Teorema del Virial
-axs[2].plot(tiempo, virial, label='$2K + U$', color='purple')
-axs[2].axhline(0, color='black', linestyle='-', linewidth=2, label='Equilibrio (Cero)')
-axs[2].set_title('Demostración del Teorema del Virial')
-axs[2].set_xlabel('Tiempo (unidades reescaladas)')
-axs[2].set_ylabel('Valor del Virial')
-axs[2].legend(loc='upper right')
-axs[2].grid(True, linestyle='--', alpha=0.6)
+
 
 plt.tight_layout()
 
