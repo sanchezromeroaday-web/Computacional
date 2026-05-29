@@ -9,9 +9,9 @@
 using namespace std;
 
 int main() {
-    int dim = 64;       // Aumentamos a 32x32 como sugiere el PDF
+    int dim = 128;       // Aumentamos a 32x32 como sugiere el PDF
     int iter = 10000;     // Pasos Monte Carlo
-    float T = 1.5;      // Temperatura
+    float T = 4.0;      // Temperatura
     unsigned int seed = 1649176165;
 
     std::srand(seed);

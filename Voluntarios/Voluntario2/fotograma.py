@@ -9,7 +9,7 @@ file_in = "ising_kawasaki.dat" # El archivo que genera tu C++
 
 # Indica aquí qué números de iteración quieres guardar.
 # IMPORTANTE: Como C++ empieza a contar en 0, si tu iter=500, el último es el 499.
-fotogramas_a_guardar = [0, 3333,6666 , 9999] 
+fotogramas_a_guardar = [10000] 
 
 # ========================================
 # Lectura del fichero de datos
@@ -36,7 +36,7 @@ for idx in fotogramas_a_guardar:
         ax.imshow(frames_data[idx], cmap="Purples", vmin=-1, vmax=+1)
         
         # Guardar la imagen en PDF recortando los márgenes blancos extra
-        nombre_archivo = f"fotograma_{idx}.png"
+        nombre_archivo = f"fotograma_4.0{idx}.png"
         fig.savefig(nombre_archivo, bbox_inches='tight', dpi=150)
         plt.close(fig) # Cerrar la figura para liberar memoria
         
