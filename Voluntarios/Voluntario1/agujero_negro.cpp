@@ -151,7 +151,7 @@ void absorberYRegenerar(std::vector<SistemaSolar>& galaxia, int& absorbidos_tota
         if (dist2 < RADIO_BH * RADIO_BH) {
             sis.activo = false;
             absorbidos_totales++;
-            // NOTA: Para el análisis extra de "inanición", comenta la línea de abajo
+        
             generarOrbitaCerrada(sis, RADIO_GALAXIA); 
         }
         // 2. El muro exterior para evitar fugas

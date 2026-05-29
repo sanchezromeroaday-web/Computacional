@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # PARÁMETRO FÍSICO IMPORTANTÍSIMO
 # ==========================================
 # Sustituye esto por el valor de (G * M_BH) que estés usando en tu C++
-GM_BH = 1.0  # <--- ¡CAMBIAR AQUÍ!
+GM_BH = 50.0  #
 
 print("Cargando datos de rotación...")
 try:
@@ -48,7 +48,7 @@ vel_error = vel_error[bins_validos]
 # CURVA TEÓRICA (KEPLER)
 # ==========================================
 r_teorico = np.linspace(min(centros_validos), R_MAX, 500)
-# Fórmula: v = sqrt(G * M_BH / r)
+# Fórmula: v = sqrt(G * M_BH / GM_BH)
 v_teorica = np.sqrt(GM_BH / r_teorico)
 
 # ==========================================
