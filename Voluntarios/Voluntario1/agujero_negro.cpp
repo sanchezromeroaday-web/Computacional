@@ -249,7 +249,7 @@ int main() {
     std::ofstream archivo_flujo("flujo_masa.dat"); 
     
     // --- NUEVO: Archivo para los datos de rendimiento
-    std::ofstream archivo_rendimiento("rendimiento_cluster.csv");
+    std::ofstream archivo_rendimiento("rendimiento_cluster_.csv");
     archivo_rendimiento << "Paso,Tiempo_ms\n"; 
 
     std::cout << "Inicializando galaxia..." << std::endl;
