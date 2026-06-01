@@ -235,9 +235,9 @@ int main() {
     std::srand(std::time(nullptr));
 
     // Parámetros de la simulación
-    int num_sistemas = 1000;
+    int num_sistemas = 500;
     double h = 0.005; 
-    int num_pasos = 60000; 
+    int num_pasos = 100000; 
     int pasos_por_frame = 50; 
     int absorbidos_totales = 0;
 

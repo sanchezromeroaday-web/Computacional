@@ -2,48 +2,45 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-# ========================================
-# Parámetros de la gráfica
-# ========================================
-# Lista de tuplas con (nombre_del_archivo, etiqueta_para_la_leyenda, color)
 archivos = [
     ("magnetizacion_32.dat", "N = 32", "blue"),
     ("magnetizacion_64.dat", "N = 64", "orange"),
     ("magnetizacion_128.dat", "N = 128", "green")
 ]
 
-# Crear la figura
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(9, 6))
 
-# ========================================
-# Lectura de datos y representación
-# ========================================
+# 1. Curva Teórica (Onsager-Yang)
+T_teo = np.linspace(0.5, 3.5, 1000)
+T_c = 2.0 / np.log(1.0 + np.sqrt(2.0))
+m_teo = np.zeros_like(T_teo)
+mascara = T_teo < T_c
+m_teo[mascara] = (1.0 - np.sinh(2.0 / T_teo[mascara])**(-4))**(1.0 / 8.0)
+plt.plot(T_teo, m_teo, '--', color='black', linewidth=2, zorder=5, label='Solución exacta (Onsager)')
+
+# 2. Datos Experimentales con Barras de Error
 for archivo, etiqueta, color in archivos:
-    # Comprobamos si el archivo existe para evitar errores
     if os.path.exists(archivo):
-        # np.loadtxt ignora automáticamente la primera línea si es texto (la cabecera)
-        # unpack=True separa las columnas en variables distintas
-        T, m_dom = np.loadtxt(archivo, skiprows=1, unpack=True)
+        # Desempaquetamos 3 columnas: T, media y el error calculado
+        T, m_dom, error = np.loadtxt(archivo, skiprows=1, unpack=True)
         
-        # Pintamos la línea con marcadores
-        plt.plot(T, m_dom, marker='o', markersize=4, linestyle='-', color=color, label=etiqueta)
+        # Función errorbar dibuja el punto, la línea y la barra de incertidumbre
+        plt.errorbar(T, m_dom, yerr=error, fmt='-o', markersize=4, color=color, 
+                     capsize=3, elinewidth=1.5, label=etiqueta)
     else:
-        print(f"Aviso: No se encontró el archivo '{archivo}'. Omítelo o genéralo en C++.")
+        print(f"Aviso: No se encontró el archivo '{archivo}'.")
 
-# ========================================
-# Formato de la gráfica
-# ========================================
-plt.title("Magnetización por dominios frente a la Temperatura", fontsize=14)
-plt.xlabel(r"Temperatura ($T$)", fontsize=12)
+# 3. Formato
+plt.title("Transición de Fase con Barras de Error (Dinámica de Kawasaki)", fontsize=14, pad=15)
+plt.xlabel("Temperatura ($T$)", fontsize=12)
 plt.ylabel(r"Magnetización por dominios ($m_{dom}$)", fontsize=12)
-
-# Añadimos una línea vertical punteada aproximada en la temperatura crítica analítica
-plt.axvline(x=2.269, color='red', linestyle='--', alpha=0.6, label=r'$T_c \approx 2.269$')
+plt.axvline(x=T_c, color='red', linestyle=':', alpha=0.8, label=rf'$T_c \approx {T_c:.3f}$')
 
 plt.legend(fontsize=11)
 plt.grid(True, linestyle=':', alpha=0.7)
+plt.xlim(0.4, 3.6)
+plt.ylim(-0.05, 1.05)
 plt.tight_layout()
 
-# Guardamos la gráfica en alta calidad para el informe y la mostramos
-plt.savefig("curva_magnetizacion.png", dpi=300)
+plt.savefig("curva_magnetizacion_errores.png", dpi=300)
 plt.show()
