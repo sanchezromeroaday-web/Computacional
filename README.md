@@ -24,10 +24,10 @@ Contiene la implementación y resolución de los 4 problemas fundamentales exigi
 * *Problema 3: Algoritmo de Crank-Nicholson - eq de Schroedinger*
 * *Problema 4: Algoritmo de Runge Kutta Problema de los tres cuerpos*
 
-### 2. Problemas Voluntarios (`/Voluntarios`)
+### 2. Problemas Voluntarios (`/notebook_voluntarios`)
 Contiene 3 proyectos de ampliación y simulación avanzada (ej. misiones espaciales, interacciones gravitatorias complejas, etc.).
-* *Voluntario 1: Formación de las galaxias a partir de sistemas solares*
-* *Voluntario 2: ??*
+* *Voluntario 1: Formación de galaxia a partir de un agujero negro*
+* *Voluntario 2: Modelo de Ising con dinámica de Kawasaki*
 
 ##  Flujo de Trabajo (Cómo usar este repositorio)
 
